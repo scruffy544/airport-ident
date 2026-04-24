@@ -1,0 +1,18 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+::selection { background: #94e8b433; color: #94e8b4; }
+html { scroll-behavior: smooth; }
+body { background: #0c1a12; color: #d4e8dc; font-family: 'Source Serif 4', Georgia, serif; -webkit-font-smoothing: antialiased; }
+input, select { outline: none; font-family: inherit; }
+input::placeholder { color: #3d5a47; }
+a { color: inherit; text-decoration: none; }
+
+.card { transition: transform 0.15s ease, border-color 0.15s ease; cursor: pointer; }
+.card:hover { transform: translateY(-2px); border-color: #2e5438 !important; }
+.search-input:focus { border-color: #3d7a52 !important; }
+.btn { transition: all 0.12s ease; cursor: pointer; }
+.btn:hover { filter: brightness(1.15); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
