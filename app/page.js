@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
-import { AIRPORTS, STATES, parseRunways } from '../data/airports';
+import { AIRPORTS, STATES, parseRunways, getDiagramUrl } from '../data/airports';
 import RunwayDiagram from '../components/RunwayDiagram';
 import Header from '../components/Header';
 
@@ -42,6 +42,13 @@ function AirportDetail({ airport, onBack }) {
           );
         })}
       </div>
+      {getDiagramUrl(airport.faa) && (
+        <div style={{ marginBottom: 24 }}>
+          <a href={getDiagramUrl(airport.faa)} target="_blank" rel="noopener noreferrer" className="btn" style={{ display: 'inline-block', padding: '14px 28px', background: '#1e3828', border: '1px solid #3d7a52', borderRadius: 8, color: '#94e8b4', fontFamily: "'DM Mono', monospace", fontSize: 13, fontWeight: 500, letterSpacing: 1, textDecoration: 'none' }}>
+            VIEW FAA AIRPORT DIAGRAM →
+          </a>
+        </div>
+      )}
       <div style={{ marginBottom: 40 }}>
         <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: '#5a8a6a', letterSpacing: 3, marginBottom: 16 }}>RUNWAY DATA</div>
         <div style={{ background: '#13261a', border: '1px solid #1e3828', borderRadius: 12, overflow: 'hidden' }}>
