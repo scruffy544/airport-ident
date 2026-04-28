@@ -5,11 +5,171 @@ import { AIRPORTS, STATES, parseRunways, getDiagramUrl } from '../data/airports'
 import RunwayDiagram from '../components/RunwayDiagram';
 import Header from '../components/Header';
 
-const PER_PAGE = 48;
+var PER_PAGE = 48;
 
-function AirportDetail({ airport, onBack }) {
-  const rwys = parseRunways(airport.runways);
-  const longestRwy = Math.max(...rwys.map(r => r.lengthNum));
+var PRODUCTS = [
+  { id: 'mug', name: 'Coffee Mug', icon: '☕', price: 22.99, desc: '11oz white ceramic', printArea: '330x400 DPI' },
+  { id: 'poster', name: 'Poster', icon: '🖼️', price: 24.99, desc: 'Museum-quality matte', printArea: '24x36 inches' },
+  { id: 'tshirt', name: 'T-Shirt', icon: '👕', price: 29.99, desc: 'Unisex cotton blend', printArea: 'Front chest print' },
+  { id: 'cap', name: 'Ball Cap', icon: '🧢', price: 27.99, desc: 'Embroidered dad hat', printArea: 'Front panel' },
+  { id: 'sticker', name: 'Oval Sticker', icon: '📋', price: 4.99, desc: 'Die-cut vinyl', printArea: '3x4 inches' },
+  { id: 'coaster', name: 'Drink Coaster', icon: '🍺', price: 9.99, desc: 'Cork-backed ceramic', printArea: '4x4 inches' },
+  { id: 'towel', name: 'Beach Towel', icon: '🏖️', price: 39.99, desc: 'Full-print microfiber', printArea: '30x60 inches' }
+];
+
+function ProductPreview(props) {
+  var airport = props.airport;
+  var product = props.product;
+  var selected = props.selected;
+  var onSelect = props.onSelect;
+  var isSelected = selected === product.id;
+
+  return (
+    <div
+      onClick={function() { onSelect(product.id); }}
+      style={{
+        background: isSelected ? '#1e3828' : '#13261a',
+        border: '1px solid ' + (isSelected ? '#3d7a52' : '#1a2e22'),
+        borderRadius: 10,
+        padding: '16px',
+        cursor: 'pointer',
+        transition: 'all 0.15s ease',
+        transform: isSelected ? 'translateY(-2px)' : 'none',
+        boxShadow: isSelected ? '0 4px 20px rgba(61,122,82,0.2)' : 'none'
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+        <span style={{ fontSize: 24 }}>{product.icon}</span>
+        <div>
+          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 14, fontWeight: 500, color: isSelected ? '#94e8b4' : '#8ab89a' }}>{product.name}</div>
+          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, color: '#5a8a6a' }}>{product.desc}</div>
+        </div>
+      </div>
+      <div style={{ background: '#0c1a12', borderRadius: 8, padding: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 100 }}>
+        <div style={{ textAlign: 'center' }}>
+          <RunwayDiagram runways={airport.runways} size={60} color={isSelected ? '#94e8b4' : '#5a8a6a'} />
+          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 16, fontWeight: 500, color: isSelected ? '#94e8b4' : '#5a8a6a', letterSpacing: 3, marginTop: 4 }}>{airport.iata}</div>
+        </div>
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
+        <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 18, fontWeight: 500, color: '#94e8b4' }}>{'$' + product.price}</div>
+        {isSelected && (
+          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, color: '#94e8b4', letterSpacing: 1 }}>SELECTED</div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ShopSection(props) {
+  var airport = props.airport;
+  var selectedProduct = props.selectedProduct;
+  var setSelectedProduct = props.setSelectedProduct;
+
+  var currentProduct = PRODUCTS.find(function(p) { return p.id === selectedProduct; });
+
+  function handleOrder() {
+    var subject = encodeURIComponent(airport.iata + ' ' + airport.name + ' - ' + currentProduct.name);
+    var body = encodeURIComponent(
+      'I would like to order:\n\n' +
+      'Product: ' + currentProduct.name + '\n' +
+      'Airport: ' + airport.iata + ' - ' + airport.name + '\n' +
+      'City: ' + airport.city + ', ' + airport.state + '\n' +
+      'ICAO: ' + airport.icao + '\n\n' +
+      'Price: $' + currentProduct.price + '\n\n' +
+      'Please send me ordering details.'
+    );
+    window.open('mailto:orders@runwaywear.co?subject=' + subject + '&body=' + body, '_blank');
+  }
+
+  return (
+    <div style={{ marginTop: 40, borderTop: '1px solid #1e3828', paddingTop: 32 }}>
+      <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: '#94e8b4', letterSpacing: 4, marginBottom: 8 }}>SHOP MERCHANDISE</div>
+      <div style={{ fontSize: 18, fontWeight: 600, color: '#d4e8dc', marginBottom: 4 }}>
+        Put {airport.iata} on your gear
+      </div>
+      <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 12, color: '#5a8a6a', marginBottom: 24 }}>
+        Select a product below to see preview and pricing
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 12, marginBottom: 24 }}>
+        {PRODUCTS.map(function(product) {
+          return (
+            <ProductPreview
+              key={product.id}
+              airport={airport}
+              product={product}
+              selected={selectedProduct}
+              onSelect={setSelectedProduct}
+            />
+          );
+        })}
+      </div>
+
+      {selectedProduct && currentProduct && (
+        <div style={{ background: '#13261a', border: '1px solid #1e3828', borderRadius: 12, padding: 24, display: 'flex', gap: 24, alignItems: 'center', flexWrap: 'wrap' }}>
+          <div style={{ flex: '0 0 auto', background: '#0c1a12', borderRadius: 10, padding: 24, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, minWidth: 160 }}>
+            <div style={{ fontSize: 36 }}>{currentProduct.icon}</div>
+            <RunwayDiagram runways={airport.runways} size={100} />
+            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 24, fontWeight: 500, color: '#94e8b4', letterSpacing: 4 }}>{airport.iata}</div>
+            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, color: '#5a8a6a' }}>{airport.city}, {airport.state}</div>
+          </div>
+          <div style={{ flex: 1, minWidth: 200 }}>
+            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: '#5a8a6a', letterSpacing: 2, marginBottom: 6 }}>YOUR ORDER</div>
+            <div style={{ fontSize: 22, fontWeight: 600, color: '#d4e8dc', marginBottom: 4 }}>{airport.iata} {currentProduct.name}</div>
+            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 13, color: '#8ab89a', marginBottom: 16 }}>
+              {airport.name}
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 20 }}>
+              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: '#5a8a6a' }}>
+                Product: {currentProduct.desc}
+              </div>
+              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: '#5a8a6a' }}>
+                Design: SVG Runway Diagram + IATA Code
+              </div>
+              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: '#5a8a6a' }}>
+                Print Area: {currentProduct.printArea}
+              </div>
+            </div>
+            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 28, fontWeight: 500, color: '#94e8b4', marginBottom: 16 }}>
+              {'$' + currentProduct.price}
+            </div>
+            <button
+              onClick={handleOrder}
+              style={{
+                padding: '14px 32px',
+                background: '#94e8b4',
+                color: '#0c1a12',
+                border: 'none',
+                borderRadius: 8,
+                fontFamily: "'DM Mono', monospace",
+                fontSize: 14,
+                fontWeight: 500,
+                letterSpacing: 2,
+                cursor: 'pointer',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              ORDER NOW →
+            </button>
+            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, color: '#3d5a47', marginTop: 10 }}>
+              Printed and shipped by our print partner. Usually arrives in 5-8 business days.
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function AirportDetail(props) {
+  var airport = props.airport;
+  var onBack = props.onBack;
+  var rwys = parseRunways(airport.runways);
+  var longestRwy = Math.max.apply(null, rwys.map(function(r) { return r.lengthNum; }));
+  var _selectedProduct = useState(null);
+  var selectedProduct = _selectedProduct[0];
+  var setSelectedProduct = _selectedProduct[1];
 
   return (
     <div style={{ maxWidth: 960, margin: '0 auto', padding: '16px 24px' }}>
@@ -70,7 +230,7 @@ function AirportDetail({ airport, onBack }) {
           })}
         </div>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12, marginBottom: 48 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12, marginBottom: 0 }}>
         <div style={{ background: '#13261a', border: '1px solid #1e3828', borderRadius: 10, padding: '16px 18px' }}>
           <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, color: '#5a8a6a', letterSpacing: 2, marginBottom: 6 }}>RUNWAYS</div>
           <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 28, fontWeight: 500, color: '#94e8b4' }}>{rwys.length}</div>
@@ -84,6 +244,8 @@ function AirportDetail({ airport, onBack }) {
           <div style={{ fontSize: 18, fontWeight: 600, color: '#d4e8dc' }}>{airport.state}</div>
         </div>
       </div>
+
+      <ShopSection airport={airport} selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct} />
     </div>
   );
 }
@@ -129,6 +291,9 @@ export default function Home() {
       <>
         <Header />
         <AirportDetail airport={selected} onBack={function() { setSelected(null); }} />
+        <footer style={{ borderTop: '1px solid #1a2e22', padding: 20, textAlign: 'center', fontFamily: "'DM Mono', monospace", fontSize: 10, color: '#1e3828', marginTop: 48 }}>
+          IDENT · {AIRPORTS.length} U.S. AIRPORTS · NOT FOR NAVIGATION · DATA SOURCE: FAA
+        </footer>
       </>
     );
   }
@@ -143,7 +308,7 @@ export default function Home() {
           </h1>
           <p style={{ fontSize: 16, color: '#6a9a7a', lineHeight: 1.5 }}>
             Search {AIRPORTS.length} airports by FAA, IATA, or ICAO code — or by name, city, or state.
-            View runway configurations, elevation data, and identifier details.
+            View runway configurations, elevation data, and identifier details. Put your favorite airport on a mug, poster, tee, or more.
           </p>
         </div>
         <div style={{ display: 'flex', gap: 10, marginBottom: 28, flexWrap: 'wrap' }}>
