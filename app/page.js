@@ -42,9 +42,9 @@ function AirportDetail({ airport, onBack }) {
           );
         })}
       </div>
-      {getDiagramUrl(airport.faa) && (
+      {getDiagramUrl(airport.faa, airport.icao) && (
         <div style={{ marginBottom: 24 }}>
-          <a href={getDiagramUrl(airport.faa)} target="_blank" rel="noopener noreferrer" className="btn" style={{ display: 'inline-block', padding: '14px 28px', background: '#1e3828', border: '1px solid #3d7a52', borderRadius: 8, color: '#94e8b4', fontFamily: "'DM Mono', monospace", fontSize: 13, fontWeight: 500, letterSpacing: 1, textDecoration: 'none' }}>
+          <a href={getDiagramUrl(airport.faa, airport.icao)} target="_blank" rel="noopener noreferrer" className="btn" style={{ display: 'inline-block', padding: '14px 28px', background: '#1e3828', border: '1px solid #3d7a52', borderRadius: 8, color: '#94e8b4', fontFamily: "'DM Mono', monospace", fontSize: 13, fontWeight: 500, letterSpacing: 1, textDecoration: 'none' }}>
             VIEW FAA AIRPORT DIAGRAM →
           </a>
         </div>
@@ -208,4 +208,3 @@ export default function Home() {
     </>
   );
 }
-
