@@ -424,9 +424,8 @@ export function parseRunways(str) {
   }).filter(Boolean);
 }
 
-// Get FAA diagram search URL for an airport by ICAO code
-// Links to the FAA's Terminal Procedures search - always current, no cycle dependency
+// Get airport diagram URL via FlightAware - always current, always correct
 export function getDiagramUrl(faaId, icao) {
   if (!icao) return null;
-  return "https://www.faa.gov/air_traffic/flight_info/aeronav/digital_products/dtpp/search/results/?cycle=current&ident=" + icao;
+  return "https://www.flightaware.com/resources/airport/" + icao + "/APD/AIRPORT+DIAGRAM";
 }
