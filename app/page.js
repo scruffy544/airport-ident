@@ -69,17 +69,7 @@ function ShopSection(props) {
   var currentProduct = PRODUCTS.find(function(p) { return p.id === selectedProduct; });
 
   function handleOrder() {
-    var subject = encodeURIComponent(airport.iata + ' ' + airport.name + ' - ' + currentProduct.name);
-    var body = encodeURIComponent(
-      'I would like to order:\n\n' +
-      'Product: ' + currentProduct.name + '\n' +
-      'Airport: ' + airport.iata + ' - ' + airport.name + '\n' +
-      'City: ' + airport.city + ', ' + airport.state + '\n' +
-      'ICAO: ' + airport.icao + '\n\n' +
-      'Price: $' + currentProduct.price + '\n\n' +
-      'Please send me ordering details.'
-    );
-    window.open('mailto:orders@runwaywear.co?subject=' + subject + '&body=' + body, '_blank');
+    window.open('https://www.etsy.com/shop/AirportIDGear', '_blank');
   }
 
   return (
@@ -150,10 +140,10 @@ function ShopSection(props) {
                 transition: 'all 0.15s ease'
               }}
             >
-              ORDER NOW →
+              ORDER ON ETSY →
             </button>
             <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, color: '#3d5a47', marginTop: 10 }}>
-              Printed and shipped by our print partner. Usually arrives in 5-8 business days.
+              Opens our Etsy shop. Printed and shipped by our print partner. Usually arrives in 5-8 business days.
             </div>
           </div>
         </div>
