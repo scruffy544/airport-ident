@@ -1,4 +1,11 @@
-'use client';
+export default function PrintifyUploaderPage() {
+  return (
+    <iframe 
+      src="/api/uploader" 
+      style={{width:'100%', height:'100vh', border:'none'}}
+    />
+  );
+}'use client';
 import { useState, useRef } from 'react';
 
 const SHOP_ID = '27346744';
