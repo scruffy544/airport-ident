@@ -38,7 +38,8 @@ document.getElementById('btn').onclick=async function(){
   lg('Image uploaded ID:'+d1.id,'#4f4');
   var ap=await(await fetch('/api/airports?code='+code)).json();
 var title=ap.name?ap.name+' ('+code+') - '+ap.city+', '+ap.state+' - Airport Code Oval Die-Cut Sticker/Luggage/Automobile Decal':code+' Airport Oval Die-Cut Sticker/Luggage/Automobile Decal';
-var prod={title:title,blueprint_id:B,print_provider_id:P,variants:V.map(function(v){return{id:v.id,price:v.p,is_enabled:true};}),print_areas:[{variant_ids:V.map(function(v){return v.id;}),placeholders:[{position:'front',images:[{id:d1.id,x:0.5,y:0.5,scale:1.05,angle:0}]}]}]};
+var tags=[code,ap.city||'',ap.state||'','airport sticker','aviation gift','pilot gift','airplane decal','luggage sticker','car decal','aviation decal','airport code','die cut sticker','travel sticker'].filter(Boolean).slice(0,13);
+var prod={title:title,tags:tags,blueprint_id:B,print_provider_id:P,variants:V.map(function(v){return{id:v.id,price:v.p,is_enabled:true};}),print_areas:[{variant_ids:V.map(function(v){return v.id;}),placeholders:[{position:'front',images:[{id:d1.id,x:0.5,y:0.5,scale:1.05,angle:0}]}]}]};
   lg('Creating product...','#adf');
   var r2=await fetch('/api/printify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({endpoint:'/v1/shops/'+S+'/products.json',method:'POST',token:t,data:prod})});
   var d2=await r2.json();if(!r2.ok){lg('ERROR: '+JSON.stringify(d2),'#f66');return;}
