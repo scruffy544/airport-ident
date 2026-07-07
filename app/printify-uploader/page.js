@@ -19,7 +19,7 @@ export default function Page() {
         <div id="lg" style={{background:'#111',borderRadius:8,padding:12,fontFamily:'monospace',fontSize:12,marginTop:12,minHeight:40,display:'none'}}></div>
       </div>
       <script dangerouslySetInnerHTML={{__html:`
-var S='27346744',B=600,P=73,V=[{id:72006,p:1099},{id:72007,p:1199},{id:72008,p:1299},{id:72009,p:1399},{id:72010,p:1499}];
+var S='27358665',B=600,P=73,V=[{id:72006,p:1099},{id:72007,p:1199},{id:72008,p:1299},{id:72009,p:1399},{id:72010,p:1499}];
 function lg(m,c){var d=document.getElementById('lg');d.style.display='block';d.innerHTML+='<div style="color:'+c+'">'+m+'</div>';}
 document.getElementById('fi').onchange=function(e){
   var f=e.target.files[0];if(!f)return;
