@@ -48,7 +48,7 @@ var prod={title:title,description:desc,tags:tags,blueprint_id:B,print_provider_i
   var d2=await r2.json();if(!r2.ok){lg('ERROR: '+JSON.stringify(d2),'#f66');return;}
   lg('Product created ID:'+d2.id,'#4f4');
   lg('Publishing...','#adf');
-  var r3=await fetch('/api/printify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({endpoint:'/v1/shops/'+S+'/products/'+d2.id+'/publish.json',method:'POST',token:t,data:{title:true,description:true,images:true,variants:true,tags:true,keyFeatures:true,shipping_template:true}})});
+  var r3=await fetch('/api/printify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({endpoint:'/v1/shops/'+S+'/products/'+d2.id+'/publish.json',method:'POST',token:t,data:{title:true,description:true,images:true,variants:true,tags:true,keyFeatures:true,shipping_template:true,free_shipping:true}})});
   if(!r3.ok){lg('Note: publish manually in Printify dashboard','#ff0');}else{lg('Published to Etsy!','#4f4');}
   lg('DONE: '+code+' created','#4f4');
 };
