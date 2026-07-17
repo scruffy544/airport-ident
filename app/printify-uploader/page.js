@@ -19,7 +19,7 @@ export default function Page() {
         <div id="lg" style={{background:'#111',borderRadius:8,padding:12,fontFamily:'monospace',fontSize:12,marginTop:12,minHeight:40,display:'none'}}></div>
       </div>
       <script dangerouslySetInnerHTML={{__html:`
-var S='27358665',B=600,P=73,V=[{id:72006,p:1099},{id:72007,p:1199},{id:72008,p:1299},{id:72009,p:1399},{id:72010,p:1499}];
+var S='27358665',B=600,P=73,V=[{id:72006,p:699},{id:72007,p:749},{id:72008,p:799},{id:72009,p:849},{id:72010,p:949}];
 var STATES={AL:'Alabama',AK:'Alaska',AZ:'Arizona',AR:'Arkansas',CA:'California',CO:'Colorado',CT:'Connecticut',DE:'Delaware',FL:'Florida',GA:'Georgia',HI:'Hawaii',ID:'Idaho',IL:'Illinois',IN:'Indiana',IA:'Iowa',KS:'Kansas',KY:'Kentucky',LA:'Louisiana',ME:'Maine',MD:'Maryland',MA:'Massachusetts',MI:'Michigan',MN:'Minnesota',MS:'Mississippi',MO:'Missouri',MT:'Montana',NE:'Nebraska',NV:'Nevada',NH:'New Hampshire',NJ:'New Jersey',NM:'New Mexico',NY:'New York',NC:'North Carolina',ND:'North Dakota',OH:'Ohio',OK:'Oklahoma',OR:'Oregon',PA:'Pennsylvania',RI:'Rhode Island',SC:'South Carolina',SD:'South Dakota',TN:'Tennessee',TX:'Texas',UT:'Utah',VT:'Vermont',VA:'Virginia',WA:'Washington',WV:'West Virginia',WI:'Wisconsin',WY:'Wyoming',DC:'District of Columbia',PR:'Puerto Rico',GU:'Guam',VI:'Virgin Islands',AS:'American Samoa'};
 function lg(m,c){var d=document.getElementById('lg');d.style.display='block';d.innerHTML+='<div style="color:'+c+'">'+m+'</div>';}
 document.getElementById('fi').onchange=function(e){
