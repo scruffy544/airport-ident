@@ -38,6 +38,7 @@ document.getElementById('btn').onclick=async function(){
   var d1=await r1.json();if(!r1.ok){lg('ERROR: '+JSON.stringify(d1),'#f66');return;}
   lg('Image uploaded ID:'+d1.id,'#4f4');
   var ap=await(await fetch('/api/airports?code='+code)).json();
+if(ap.error){ap=await(await fetch('/api/ga-airports?code='+code)).json();}
   var stateName=STATES[ap.state]||ap.state||'';
   var title=ap.name?ap.name+' ('+code+') - '+ap.city+', '+ap.state+' - Airport Code Oval Die-Cut Sticker/Luggage/Automobile Decal':code+' Airport Oval Die-Cut Sticker/Luggage/Automobile Decal';
   var tags=[code,ap.city||'',stateName,'airport sticker','aviation gift','pilot gift','airplane decal','luggage sticker','car decal','aviation decal','airport code','die cut sticker','travel sticker'].filter(Boolean).slice(0,13);
