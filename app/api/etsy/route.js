@@ -47,10 +47,12 @@ async function getAccessToken() {
   return { accessToken: data.access_token, userId };
 }
 
-async function getShopId(accessToken, userId, keystring) {
+// NOTE: apiKeyHeader is the FULL "keystring:sharedsecret" string -
+// every Etsy v3 endpoint requires both parts, not just the keystring.
+async function getShopId(accessToken, userId, apiKeyHeader) {
   const res = await fetch(`${ETSY_API_BASE}/users/${userId}/shops`, {
     headers: {
-      "x-api-key": keystring,
+      "x-api-key": apiKeyHeader,
       Authorization: `Bearer ${accessToken}`,
     },
   });
@@ -61,7 +63,7 @@ async function getShopId(accessToken, userId, keystring) {
   return data.shop_id;
 }
 
-async function uploadListingImage({ accessToken, keystring, shopId, listingId, imageUrl, rank }) {
+async function uploadListingImage({ accessToken, apiKeyHeader, shopId, listingId, imageUrl, rank }) {
   const imgRes = await fetch(imageUrl);
   if (!imgRes.ok) {
     throw new Error(`Failed to download image from ${imageUrl}`);
@@ -77,7 +79,7 @@ async function uploadListingImage({ accessToken, keystring, shopId, listingId, i
     {
       method: "POST",
       headers: {
-        "x-api-key": keystring,
+        "x-api-key": apiKeyHeader,
         Authorization: `Bearer ${accessToken}`,
       },
       body: form,
@@ -96,20 +98,22 @@ export async function POST(request) {
     const body = await request.json();
     const { action } = body;
     const keystring = process.env.ETSY_KEYSTRING;
+    const sharedSecret = process.env.ETSY_SHARED_SECRET;
+    const apiKeyHeader = `${keystring}:${sharedSecret}`;
 
     const { accessToken, userId } = await getAccessToken();
 
     if (action === "getShopId") {
-      const shopId = await getShopId(accessToken, userId, keystring);
+      const shopId = await getShopId(accessToken, userId, apiKeyHeader);
       return Response.json({ shop_id: shopId });
     }
 
     if (action === "uploadImage") {
       const { listingId, imageUrl, rank } = body;
-      const shopId = process.env.ETSY_SHOP_ID || (await getShopId(accessToken, userId, keystring));
+      const shopId = process.env.ETSY_SHOP_ID || (await getShopId(accessToken, userId, apiKeyHeader));
       const result = await uploadListingImage({
         accessToken,
-        keystring,
+        apiKeyHeader,
         shopId,
         listingId,
         imageUrl,
