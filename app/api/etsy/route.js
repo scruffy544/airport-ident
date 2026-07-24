@@ -62,4 +62,64 @@ async function getShopId(accessToken, userId, keystring) {
 }
 
 async function uploadListingImage({ accessToken, keystring, shopId, listingId, imageUrl, rank }) {
-  const
+  const imgRes = await fetch(imageUrl);
+  if (!imgRes.ok) {
+    throw new Error(`Failed to download image from ${imageUrl}`);
+  }
+  const imgBlob = await imgRes.blob();
+
+  const form = new FormData();
+  form.append("image", imgBlob, "mockup.jpg");
+  if (rank) form.append("rank", String(rank));
+
+  const uploadRes = await fetch(
+    `${ETSY_API_BASE}/shops/${shopId}/listings/${listingId}/images`,
+    {
+      method: "POST",
+      headers: {
+        "x-api-key": keystring,
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: form,
+    }
+  );
+
+  const data = await uploadRes.json();
+  if (!uploadRes.ok) {
+    throw new Error(`Etsy image upload failed: ${JSON.stringify(data)}`);
+  }
+  return data;
+}
+
+export async function POST(request) {
+  try {
+    const body = await request.json();
+    const { action } = body;
+    const keystring = process.env.ETSY_KEYSTRING;
+
+    const { accessToken, userId } = await getAccessToken();
+
+    if (action === "getShopId") {
+      const shopId = await getShopId(accessToken, userId, keystring);
+      return Response.json({ shop_id: shopId });
+    }
+
+    if (action === "uploadImage") {
+      const { listingId, imageUrl, rank } = body;
+      const shopId = process.env.ETSY_SHOP_ID || (await getShopId(accessToken, userId, keystring));
+      const result = await uploadListingImage({
+        accessToken,
+        keystring,
+        shopId,
+        listingId,
+        imageUrl,
+        rank,
+      });
+      return Response.json(result);
+    }
+
+    return Response.json({ error: "Unknown action" }, { status: 400 });
+  } catch (error) {
+    return Response.json({ error: error.message }, { status: 500 });
+  }
+}
