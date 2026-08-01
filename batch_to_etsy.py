@@ -62,7 +62,7 @@ from pathlib import Path
 # ------------------------------------------------------------------
 # CONFIG — fill this in
 # ------------------------------------------------------------------
-PRINTIFY_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzN2Q0YmQzMDM1ZmUxMWU5YTgwM2FiN2VlYjNjY2M5NyIsImp0aSI6Ijc4ZGJmMGYyMDY2YWUwMWMwOTcwZTU0ZTdjM2FmM2UzYjk3MGYyN2Q0Y2VmZmI2YmY4ZDRiZjgyM2YyYzZiMjQ1NDBlMDEzMTZlNjRmOWQ4IiwiaWF0IjoxNzgyMjY1NDcxLjc1NTg3OCwibmJmIjoxNzgyMjY1NDcxLjc1NTg4MSwiZXhwIjoxODEzODAxNDcxLjc0NzkzLCJzdWIiOiIyNzExNDkwOCIsInNjb3BlcyI6WyJzaG9wcy5tYW5hZ2UiLCJzaG9wcy5yZWFkIiwiY2F0YWxvZy5yZWFkIiwib3JkZXJzLnJlYWQiLCJvcmRlcnMud3JpdGUiLCJwcm9kdWN0cy5yZWFkIiwicHJvZHVjdHMud3JpdGUiLCJ3ZWJob29rcy5yZWFkIiwid2ViaG9va3Mud3JpdGUiLCJ1cGxvYWRzLnJlYWQiLCJ1cGxvYWRzLndyaXRlIiwicHJpbnRfcHJvdmlkZXJzLnJlYWQiLCJ1c2VyLmluZm8iXX0.dVqTilIF9ECHkjnOF_ZmIyPpbIRrE9YIIdyNBKyCXWO_f0iCIUSB9HZeg6qUvPGdT_dtRCIBI7tbV4-TkobfwM-acmMKG_w0Gs2UFK1yflX3b7fXQyj9RZyzHdYnZcaXLLpEkG1JrEjOZfUHtgG22EmwzCwyJms1WwzhaAbx6pkqrtMy0l7pKYbB8_P7SI-2RUxEtHhGvSLsBnkbsrK0xx7ZEmKimsk8tfWvV1t9tN4bR_PJ7TbjpSdOmFWPVIY2p3ZFiYfH49YX5jk83zeQxij0KLybnKIR5Ln68g8g_IhC_odRyDHGuzx6hlXp7KyYd4uJxcZ4SzCNTQkVo_OH8hxrHiDspRbsjXA8JlNOwIsb-yYVat1EIJkcy3hc3kYvdjrr4z7jSj3f4_xjHNMt5sZdynj27H_Xl_hF5N7sS1rhcbs0ALs8x7cY4EjTxZy4OKjf4DpUVNeHKjWEfdeCQ9mAC97Ckpgqx5AEKzQ9Hc9AJvsPsRq_IoisgAQpyDVJXQ7ur_bJFt7IHUE-hPAlbHy9HmvXRQ2nM1U3gY1TamhQXEqi0d-GYbuUz8sa-N4vdKierZzmXNxRRv2sVP-A0w9uj8aBqFmFVXJtTL7YH4hExN35f4NlQtS7saixdArNkH6dQ2ZNMzAHlVRpdk2e3SKfwMmiou4TSM4FwvInCeM"  # <-- paste your Printify Personal Access Token between these quotes, nowhere else
+PRINTIFY_TOKEN = ""  # <-- paste your Printify Personal Access Token between these quotes, nowhere else
 ETSY_ROUTE_URL = "https://airportdiagram.com/api/etsy"
 BATCH_SIZE = 5
 
