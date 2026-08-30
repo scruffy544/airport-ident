@@ -122,6 +122,16 @@ def create_oval(code, name, city, state, outdir):
     d = ImageDraw.Draw(tmp_img)
     d.text((1500, 800), code, font=font, fill="black", anchor="mm")
     bbox = tmp_img.getbbox()
+    MAX_CODE_WIDTH = 0.80 * (2 * RX)
+    code_w = bbox[2] - bbox[0]
+    if code_w > MAX_CODE_WIDTH:
+        scale = MAX_CODE_WIDTH / code_w
+        code_size = max(200, int(code_size * scale))
+        font = ImageFont.truetype(FONT_PATH, code_size)
+        tmp_img = Image.new("RGBA", (3000, 1600), (0, 0, 0, 0))
+        d = ImageDraw.Draw(tmp_img)
+        d.text((1500, 800), code, font=font, fill="black", anchor="mm")
+        bbox = tmp_img.getbbox()
     code_img = tmp_img.crop(bbox)
     cw, ch = code_img.size
     base.paste(code_img, (CX - cw // 2, CY - ch // 2), code_img)
