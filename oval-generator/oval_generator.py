@@ -117,21 +117,31 @@ def create_oval(code, name, city, state, outdir):
     base = get_base()
 
     code_size = 760 if len(code) <= 3 else 690
-    font = ImageFont.truetype(FONT_PATH, code_size)
-    tmp_img = Image.new("RGBA", (3000, 1600), (0, 0, 0, 0))
-    d = ImageDraw.Draw(tmp_img)
-    d.text((1500, 800), code, font=font, fill="black", anchor="mm")
-    bbox = tmp_img.getbbox()
     MAX_CODE_WIDTH = 0.80 * (2 * RX)
-    code_w = bbox[2] - bbox[0]
+
+    # Measure true text width via the font metrics (not a fixed-size canvas,
+    # which clips and under-measures long codes at large point sizes) so the
+    # shrink factor is accurate for any code length.
+    font = ImageFont.truetype(FONT_PATH, code_size)
+    code_w = font.getlength(code)
     if code_w > MAX_CODE_WIDTH:
         scale = MAX_CODE_WIDTH / code_w
         code_size = max(200, int(code_size * scale))
         font = ImageFont.truetype(FONT_PATH, code_size)
-        tmp_img = Image.new("RGBA", (3000, 1600), (0, 0, 0, 0))
-        d = ImageDraw.Draw(tmp_img)
-        d.text((1500, 800), code, font=font, fill="black", anchor="mm")
-        bbox = tmp_img.getbbox()
+        code_w = font.getlength(code)
+        # Corrective second pass in case rounding/hinting at the new size
+        # still leaves it oversized (can happen right at the boundary).
+        if code_w > MAX_CODE_WIDTH:
+            scale = MAX_CODE_WIDTH / code_w
+            code_size = max(200, int(code_size * scale))
+            font = ImageFont.truetype(FONT_PATH, code_size)
+
+    canvas_w = int(font.getlength(code)) + 400
+    canvas_h = code_size * 2
+    tmp_img = Image.new("RGBA", (canvas_w, canvas_h), (0, 0, 0, 0))
+    d = ImageDraw.Draw(tmp_img)
+    d.text((canvas_w // 2, canvas_h // 2), code, font=font, fill="black", anchor="mm")
+    bbox = tmp_img.getbbox()
     code_img = tmp_img.crop(bbox)
     cw, ch = code_img.size
     base.paste(code_img, (CX - cw // 2, CY - ch // 2), code_img)
@@ -152,3 +162,5 @@ def create_oval(code, name, city, state, outdir):
     outpath = f"{outdir}/{code}-oval-5x35.png"
     base.save(outpath)
     return outpath
+
+
